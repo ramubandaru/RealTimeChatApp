@@ -1,0 +1,45 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+@*<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>*@
+
+
+<div>
+   <div class="main-div">
+       <table>
+           <tr>
+               <td class="td.chatroom" >
+                   <div class="div.chatroom">
+                       @*Available Chat rooms to join <br /><br /><br />
+        <h4>Chat Rooms</h4>
+        <select id='chatroom' name='ChatRoom' onClick="getChatRooms()">
+        </select>*@
+                       
+                       <select id="chatRooms" name="chatRooms" multiple="multiple">
+                           <option value="150">General</option>
+                           <option value="151">Eagles Team</option>
+                       </select>
+                   </div>
+               </td>
+               <td>
+                   <ul id="message-history" class="message-history"></ul>
+                   <input id="message-content" class="message-text" />
+               </td>
+           </tr>
+       </table>
+       
+       
+   </div>
+
+
+</div>
+
+@section Scripts{
+     <script data-main="scripts/main" src="http://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+ }
