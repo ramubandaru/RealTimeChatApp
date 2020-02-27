@@ -9,9 +9,9 @@ namespace RealTimeChatApp.Models
     {
         public int MessageId { get; set; }
         public int EmpId { get; set; }
-        public string EmpName { get; set; }
+        public string Name { get; set; }
         public int RoomId { get; set; }
         public string Message { get; set; }
-        public DateTime DateSent { get; set; }
+        public string DateSent { get; set; }
     }
 }

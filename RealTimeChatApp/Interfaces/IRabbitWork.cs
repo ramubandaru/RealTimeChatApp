@@ -8,7 +8,7 @@ namespace RealTimeChatApp.Interfaces
 {
     public interface IRabbitWork
     {
-        void Publish(RabbitMessage rabbitMessage, string exchange, string routingKey);
+        //void Publish(RabbitMessage rabbitMessage, string exchange, string routingKey);
         //void Consume(string message);
     }
 }

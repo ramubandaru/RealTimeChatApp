@@ -20,63 +20,64 @@ namespace RealTimeChatApp.RabbitMQ
         //ConnectionFactory _factory = new ConnectionFactory();
         //private readonly IConnectionFactory _connectionFactory;
         //private readonly IConnection _connection;
-        private readonly IModel _channel;
-        //private readonly EventingBasicConsumer _basicConsumer;
+        //private readonly IModel _channel;
+       
 
-        public string queueName = "ChatQueue";
-        public string exchange = "ChatExchange";
-        public string routingKey = "ChatRoutingKey";
-        public RabbitWork(IConnection connection)
-        {
-            //_connectionFactory = connectionFactory;
-            //_connection = _factory.CreateConnection();
-            _channel = connection.CreateModel();
-            StartRabbit();
-            var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += ConsumerReceived;
-            //string message = string.Empty;
-            //consumer.Received += (model, ea) =>
-            //{
-            //    var body = ea.Body;
-            //    message = Encoding.UTF8.GetString(body);
-
-            //};
-            //Console.WriteLine(" [x] Received {0}", message);
-            //QueueController queueController = new QueueController();
-            //queueController.ShowMessage(message);
-            _channel.BasicConsume(queueName, false, consumer);
-
-        }
-
-        public void StartRabbit()
-        {
-            _channel.ExchangeDeclare(exchange, ExchangeType.Direct, true, false, null);
-            _channel.QueueDeclare(queueName);
-            _channel.QueueBind(queueName, exchange, routingKey);
-
-        }
-
-        public void Publish(RabbitMessage rabbitMessage, string exchange, string routingKey)
-        {
-            //StartRabbit();
-            var sendBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(rabbitMessage));
-            _channel.BasicPublish(exchange, routingKey, null, sendBytes);
+        //public string queueName = "ChatQueue";
+        //public string exchange = "ChatExchange";
+        //public string routingKey = "ChatRoutingKey";
+        //public RabbitWork(IConnection connection)
+        //{
+        //    //_connectionFactory = connectionFactory;
+        //    //_connection = _factory.CreateConnection();
             
-        }
+        //    _channel = connection.CreateModel();
+        //    StartRabbit();
+        //    var consumer = new EventingBasicConsumer(_channel);
+        //    consumer.Received += ConsumerReceived;
+        //    //string message = string.Empty;
+        //    //consumer.Received += (model, ea) =>
+        //    //{
+        //    //    var body = ea.Body;
+        //    //    message = Encoding.UTF8.GetString(body);
 
-        public void ConsumerReceived(object sender, BasicDeliverEventArgs ea)
-        {
-            var consumer = new EventingBasicConsumer(_channel);
+        //    //};
+        //    //Console.WriteLine(" [x] Received {0}", message);
+        //    //QueueController queueController = new QueueController();
+        //    //queueController.ShowMessage(message);
+        //    _channel.BasicConsume(queueName, false, consumer);
+
+        //}
+
+        //public void StartRabbit()
+        //{
+        //    _channel.ExchangeDeclare(exchange, ExchangeType.Direct, true, false, null);
+        //    _channel.QueueDeclare(queueName);
+        //    _channel.QueueBind(queueName, exchange, routingKey);
+
+        //}
+
+        //public void Publish(RabbitMessage rabbitMessage, string exchange, string routingKey)
+        //{
+        //    //StartRabbit();
+        //    var sendBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(rabbitMessage));
+        //    _channel.BasicPublish(exchange, routingKey, null, sendBytes);
             
-            string message = Encoding.UTF8.GetString(ea.Body);
+        //}
 
-            var rabbitResponse = JsonConvert.DeserializeObject<RabbitMessage>(message);
+        //public void ConsumerReceived(object sender, BasicDeliverEventArgs ea)
+        //{
+        //    var consumer = new EventingBasicConsumer(_channel);
             
-            ChatHandler chatHandler = new ChatHandler(this, null, new WebSocketConnectionManager());
-            Task.Run(() =>chatHandler.PingMesssage(rabbitResponse.SocketId, rabbitResponse.SentFrom, rabbitResponse.Message));
+        //    string message = Encoding.UTF8.GetString(ea.Body);
 
-            _channel.BasicConsume("ChatQueue", false, consumer);
-        }
+        //    var rabbitResponse = JsonConvert.DeserializeObject<RabbitMessage>(message);
+
+            
+        //    Task.Run(() => _chatHandler.PingMesssage(rabbitResponse.SocketId, rabbitResponse.SentFrom, rabbitResponse.Message));
+
+        //    _channel.BasicConsume("ChatQueue", false, consumer);
+        //}
 
        
 

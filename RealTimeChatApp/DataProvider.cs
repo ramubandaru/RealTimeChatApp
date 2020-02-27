@@ -32,10 +32,9 @@ namespace RealTimeChatApp
         {
             try
             {
-            
                 using (IDbConnection conn = Connection)
                 {
-                    string sQuery = $"SELECT m.*, e.Name FROM Messages m LEFT JOIN Employees e ON e.EmpId = m.EmpId WHERE m.RoomId = {RoomId} order by DateSent desc";
+                    string sQuery = $"SELECT m.*, e.Name FROM Messages m LEFT JOIN Employees e ON e.EmpId = m.EmpId WHERE m.RoomId = {RoomId} order by MessageId asc";
                     conn.Open();
                     var response = await conn.QueryAsync<Messages>(sQuery);
                     return response.ToList();
@@ -51,13 +50,22 @@ namespace RealTimeChatApp
 
         public async Task<bool> InsertIntoMessages(Messages message)
         {
-            using (IDbConnection conn = Connection)
+            try
             {
-                string sQuery = $"INSERT INTO [dbo].[Messages] ([RoomId], [EmpId], [DateSent],[Message]) VALUES ( {message.RoomId}, {message.EmpId}, {message.DateSent}, {message.Message})";
-                conn.Open();
-                var result = await conn.QueryAsync(sQuery);
-                return true;
+                using (IDbConnection conn = Connection)
+                {
+                    string sQuery = $"INSERT INTO [dbo].[Messages] ([RoomId], [EmpId], [DateSent],[Message]) VALUES ( {message.RoomId}, {message.EmpId}, '{message.DateSent}', '{message.Message}')";
+                    conn.Open();
+                    var result = await conn.QueryAsync(sQuery);
+                    return true;
+                }
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Failed connecting to database or failed retrieving messages from database");
+                return false;
+            }
+            
         }
 
         public async Task<List<Employees>> GetEmployees()

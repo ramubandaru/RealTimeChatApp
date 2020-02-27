@@ -31,7 +31,7 @@ namespace RealTimeChatApp
             services.AddWebSocketManager();
             //services.AddRazorPages();
 
-            services.AddSingleton<IRabbitWork, RabbitWork>(sp =>
+            services.AddSingleton<IConnection>(sp =>
             {
                 var connectionFactory = new ConnectionFactory()
                 {
@@ -41,19 +41,12 @@ namespace RealTimeChatApp
                     Password = Configuration["RabbitMqConnection:Password"],
                     VirtualHost = Configuration["RabbitMqConnection:VirtualHost"]
                 };
-                return new RabbitWork(connectionFactory.CreateConnection());
+                return new ConnectionFactory().CreateConnection();
             });
 
-            //services.AddOptions();
             services.AddTransient<IDataProvider, DataProvider>();
-        
 
-
-
-        //services.AddSingleton<IRabbitWork, RabbitWork>();
-        //services.AddSingleton<IRabbitWork, RabbitWork>();
-
-            services.AddMvc(); 
+            services.AddMvc();
 
         }
 
@@ -70,11 +63,12 @@ namespace RealTimeChatApp
             }
 
             app.UseWebSockets();
-            
+
             app.MapWebSocketManager("/chat", serviceProvider.GetService<ChatHandler>());
 
+
             app.UseStaticFiles();
-            
+
             app.UseRouting();
 
             app.UseAuthorization();
